@@ -10,6 +10,7 @@ struct BlogPost {
     std::string title;
     std::string content;
     std::string author;
+    std::string created_at;
 };
 
 class PostStorage {
@@ -18,7 +19,7 @@ public:
 
     std::vector<BlogPost> get_all_posts();
     BlogPost get_post_by_id(int id);
-    void add_post(const std::string& title, const std::string& content,const std::string& author);
+    void add_post(const std::string& title, const std::string& content,const std::string& author, const std::string& created_at);
 
 private:
     PostStorage() = default;

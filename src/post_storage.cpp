@@ -20,7 +20,7 @@ BlogPost PostStorage::get_post_by_id(int id) {
     return {0, "Not Found", "The requested post does not exist."};
 }
 
-void PostStorage::add_post(const std::string& title, const std::string& content, const std::string& author) {
+void PostStorage::add_post(const std::string& title, const std::string& content, const std::string& author,const std::string &time) {
     std::lock_guard<std::mutex> lock(mutex_);
-    posts_.push_back({next_id_++, title, content,author});
+    posts_.push_back({next_id_++, title, content,author,time});
 }

@@ -46,11 +46,17 @@ http::response<http::string_body> Router::render_posts() {
     auto posts = PostStorage::get_instance().get_all_posts();
     std::stringstream posts_list;
 
+    //根据时间排序
+    std::sort(posts.begin(), posts.end(), [](const BlogPost& a, const BlogPost& b) {
+        return a.created_at > b.created_at;
+    });
+
     // 动态生成文章列表与作者姓名的HTML
     for (const auto& post : posts) {
         posts_list << "<li>"
                    << "<a href='/posts/" << post.id << "'>" << post.title << "</a>"
-                   << "<p style='font-size: 0.9em; color: #666;'>Author: " << post.author << "</p>"  // 显示作者信息
+                   << "<p style='font-size: 0.9em; color: #666;'>作者: " << post.author << "</p>"  // 显示作者信息
+                    <<"<p style='font-size: 0.5em; color: #233;'>发布时间: "<<post.created_at<<"</p>"   // 显示创建时间
                    << "</li>";
     }
 
@@ -75,11 +81,13 @@ http::response<http::string_body> Router::render_post(int id) {
     std::string escaped_title = HtmlHandle::escape_html(post.title);
     std::string escaped_content = HtmlHandle::escape_html(post.content);
     std::string escaped_author = HtmlHandle::escape_html(post.author);
+    std::string escaped_created_at = HtmlHandle::escape_html(post.created_at);
 
     // 替换占位符
     HtmlHandle::replace_placeholder(html_content, "{{post_title}}", escaped_title);
     HtmlHandle::replace_placeholder(html_content, "{{post_content}}", escaped_content);
     HtmlHandle::replace_placeholder(html_content, "{{post_author}}", escaped_author);  // 替换作者
+    HtmlHandle::replace_placeholder(html_content, "{{post_time}}", escaped_created_at);
 
     // 调试信息：检查生成的HTML
     std::cout << "Generated HTML:\n" << html_content << std::endl;
@@ -154,8 +162,13 @@ http::response<http::string_body> Router::handle_new_post(const http::request<ht
     std::cout << "Title: " << title << std::endl;
     std::cout << "Content: " << content << std::endl;
 
+    //获取北京时间
+    std::time_t now = std::time(nullptr);
+    std::string time = std::asctime(std::gmtime(&now));
+    time.erase(std::remove(time.begin(), time.end(), '\n'), time.end());
+
     // 将新文章添加到存储中
-    PostStorage::get_instance().add_post(title, content, author);
+    PostStorage::get_instance().add_post(title, content, author,time);
 
     http::response<http::string_body> res;
     res.result(http::status::found);
