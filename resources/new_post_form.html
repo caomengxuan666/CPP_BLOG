@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Post</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Header 样式 */
+        header {
+            background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+            color: #fff;
+            width: 100%;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        /* 导航栏样式 */
+        nav {
+            margin-top: 15px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1em;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* 主体内容样式 */
+        main {
+            background: #fff;
+            padding: 40px;
+            margin: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 1000px;
+            text-align: left;
+        }
+
+        main label {
+            font-weight: bold;
+        }
+
+        main input[type="text"],
+        main textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        main input[type="submit"] {
+            background: #6b73ff;
+            color: #fff;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        main input[type="submit"]:hover {
+            background: #000dff;
+        }
+
+        /* Footer 样式 */
+        footer {
+            margin-top: auto;
+            background: #333;
+            color: #fff;
+            padding: 15px 0;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1em;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <h1>发送博文</h1>
+    <nav>
+        <a href="/">主页</a> | <a href="/posts">博客</a>
+    </nav>
+</header>
+<main>
+    <form action="/new-post" method="POST">
+        <label for="author">Author:</label><br>
+        <input type="text" id="author" name="author" required><br><br>
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" required><br><br>
+        <label for="content">Content:</label><br>
+        <!-- 使用 EasyMDE 替换文本框以实现 Markdown 富文本编辑器 -->
+        <textarea id="content" name="content" rows="12" cols="50"></textarea><br><br>
+        <input type="submit" value="Submit">
+    </form>
+</main>
+<footer>
+    <p>&copy; 2024 CMX'S Blog Server</p>
+</footer>
+
+<!-- 引入 EasyMDE JavaScript 文件 -->
+<script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+<script>
+    // 初始化 EasyMDE 编辑器
+    var easyMDE = new EasyMDE({ element: document.getElementById('content') });
+
+    // 在表单提交前同步内容到 textarea
+    document.querySelector('form').addEventListener('submit', function () {
+        easyMDE.codemirror.save(); // 同步内容到原始的 textarea
+    });
+</script>
+</body>
+
+</html>

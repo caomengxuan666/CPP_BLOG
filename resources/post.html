@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{post_title}}</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Header 样式 */
+        header {
+            background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);
+            color: #fff;
+            width: 100%;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        /* 导航栏样式 */
+        nav {
+            margin-top: 15px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1em;
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+
+        nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* 主体内容样式 */
+        main {
+            background: #fff;
+            padding: 30px;
+            margin: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 800px;
+            text-align: left;
+        }
+
+        main p {
+            font-size: 1.2em;
+            line-height: 1.6em;
+        }
+
+        /* Footer 样式 */
+        footer {
+            margin-top: auto;
+            background: #333;
+            color: #fff;
+            padding: 15px 0;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 -4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>{{post_title}}</h1>
+    <p><strong>Author:</strong> {{post_author}}</p>
+    <nav>
+        <a href="/">主页</a> | <a href="/posts">返回博客</a>
+    </nav>
+</header>
+<main>
+    <p>{{post_content}}</p>
+</main>
+<footer>
+    <p>&copy; 2024 CMX'S Blog Server</p>
+</footer>
+</body>
+</html>
