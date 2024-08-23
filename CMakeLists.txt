@@ -19,7 +19,6 @@ set(PROJECT_FILES
         src/post_storage.cpp
         src/post_storage.hpp
         src/HtmlHandle.hpp
-        src/LocalFileSystem.hpp
 )
 
 # 查找Boost库
