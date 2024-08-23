@@ -107,3 +107,6 @@ void DataBase::operator->*(std::vector<std::map<std::string, std::string>>result
         std::cout << "ID: " << row.at("id") << ", Name: " << row.at("name") << std::endl;
     }
 }
+int DataBase::operator[](const std::string &command) const {
+    return execCommand(command);
+}
