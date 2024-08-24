@@ -1,0 +1,8 @@
+create table passage
+(
+    title       TEXT not null,
+    author_name TEXT not null,
+    content     TEXT not null,
+    create_time TEXT not null
+);
+
