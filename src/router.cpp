@@ -1,5 +1,6 @@
 #include "router.hpp"
 #include "post_storage.hpp"
+#include "DataBase_storage.hpp"
 
 
 // 路由主入口函数，处理不同的请求路径和方法
@@ -63,7 +64,7 @@ http::response<http::string_body> Router::render_posts() {
     HtmlHandle::replace_placeholder(html_content, "{{posts_list}}", posts_list.str());
 
     // 打印调试信息
-    std::cout << "Generated HTML:\n" << html_content << std::endl;
+    //std::cout << "Generated HTML:\n" << html_content << std::endl;
 
     http::response<http::string_body> res;
     res.result(http::status::ok);
@@ -77,20 +78,13 @@ http::response<http::string_body> Router::render_post(int id) {
     std::string html_content = HtmlHandle::load_html_template("resources/post.html");
     auto post = PostStorage::get_instance().get_post_by_id(id);
 
-    // HTML转义后的标题、内容和作者
-    std::string escaped_title = HtmlHandle::escape_html(post.title);
-    std::string escaped_content = HtmlHandle::escape_html(post.content);
-    std::string escaped_author = HtmlHandle::escape_html(post.author);
-    std::string escaped_created_at = HtmlHandle::escape_html(post.created_at);
-
-    // 替换占位符
-    HtmlHandle::replace_placeholder(html_content, "{{post_title}}", escaped_title);
-    HtmlHandle::replace_placeholder(html_content, "{{post_content}}", escaped_content);
-    HtmlHandle::replace_placeholder(html_content, "{{post_author}}", escaped_author);  // 替换作者
-    HtmlHandle::replace_placeholder(html_content, "{{post_time}}", escaped_created_at);
+    HtmlHandle::replace_placeholder(html_content, "{{post_title}}", post.title);
+    HtmlHandle::replace_placeholder(html_content, "{{post_content}}", post.content);
+    HtmlHandle::replace_placeholder(html_content, "{{post_author}}", post.author);  // 替换作者
+    HtmlHandle::replace_placeholder(html_content, "{{post_time}}", post.created_at);
 
     // 调试信息：检查生成的HTML
-    std::cout << "Generated HTML:\n" << html_content << std::endl;
+    //std::cout << "Generated HTML:\n" << html_content << std::endl;
 
     http::response<http::string_body> res;
     res.result(http::status::ok);
@@ -139,10 +133,21 @@ http::response<http::string_body> Router::handle_new_post(const http::request<ht
     std::string title = body.substr(title_start, title_end - title_start);
     std::string content = body.substr(content_start, content_end - content_start);
 
+
     // 使用 URL 解码
     author = HtmlHandle::url_decode(author);
     title = HtmlHandle::url_decode(title);
     content = HtmlHandle::url_decode(content);
+
+    // 初始化禁止关键词
+    Forbidden::init_forbidden_keywords();
+    // 过滤用户的提交内容
+    author = Forbidden::filter_content(author);
+    title = Forbidden::filter_content(title);
+    content = Forbidden::filter_content(content);
+
+    // 打印调试信息
+    std::cout << "Content Debug: " << content << std::endl;
 
     // 清除末尾可能多余的非可见字符或空白字符
     author.erase(std::find_if(author.rbegin(), author.rend(), [](unsigned char ch) {
@@ -157,18 +162,24 @@ http::response<http::string_body> Router::handle_new_post(const http::request<ht
                       return !std::isspace(ch);
                   }).base(), content.end());
 
+
     // 打印调试信息
+    /*
     std::cout << "Author: " << author << std::endl;
     std::cout << "Title: " << title << std::endl;
     std::cout << "Content: " << content << std::endl;
-
+    */
     //获取北京时间
     std::time_t now = std::time(nullptr);
     std::string time = std::asctime(std::gmtime(&now));
     time.erase(std::remove(time.begin(), time.end(), '\n'), time.end());
 
+
     // 将新文章添加到存储中
     PostStorage::get_instance().add_post(title, content, author,time);
+
+    // 将文章存储到SQLITE数据库
+    DataBase_storage::getInstance().add_post(title, content, author,time);
 
     http::response<http::string_body> res;
     res.result(http::status::found);

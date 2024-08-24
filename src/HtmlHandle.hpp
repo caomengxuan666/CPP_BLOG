@@ -8,6 +8,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include "Forbidden.hpp"
 
 
 class HtmlHandle {
@@ -74,6 +75,13 @@ public:
             pos = html.find(placeholder, pos + value.length());
         }
     }
+
+    static void replace_forbidden_keyword(std::string& html)
+    {
+        html = Forbidden::filter_content(html);
+    }
+
+private:
 };
 
 

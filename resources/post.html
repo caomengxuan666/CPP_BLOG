@@ -86,19 +86,32 @@
             margin: 0;
             font-size: 1em;
         }
+
+        /* 新增样式 */
+        .post-meta {
+            margin-bottom: 10px;
+        }
+
+        .post-content {
+            white-space: pre-wrap; /* 保留换行符和空格 */
+        }
     </style>
 </head>
 <body>
 <header>
     <h1>{{post_title}}</h1>
-    <p><strong>作者:</strong> {{post_author}}</p>
-    <p><strong>发布于:</strong> {{post_time}}</p> <!-- 添加发布时间显示 -->
+    <div class="post-meta">
+        <p><strong>作者:</strong> {{post_author}}</p>
+        <p><strong>发布于:</strong> {{post_time}}</p>
+    </div>
     <nav>
         <a href="/">主页</a> | <a href="/posts">返回博客</a>
     </nav>
 </header>
 <main>
-    <p>{{post_content}}</p>
+    <div class="post-content">
+        {{post_content}}
+    </div>
 </main>
 <footer>
     <p>&copy; 2024 CMX'S Blog Server</p>

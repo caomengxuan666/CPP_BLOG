@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>New Post</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.css">
+    <!-- 引入 wangEditor 的 CSS -->
+    <link href="https://unpkg.com/@wangeditor/editor@latest/dist/css/style.css" rel="stylesheet">
     <style>
         /* 全局样式 */
         body {
@@ -112,9 +112,20 @@
             margin: 0;
             font-size: 1em;
         }
+
+        /* wangEditor 的自定义样式 */
+        #editor-wrapper {
+            border: 1px solid #ccc;
+            z-index: 100; /* 按需定义 */
+        }
+        #toolbar-container {
+            border-bottom: 1px solid #ccc;
+        }
+        #editor-container {
+            height: 500px;
+        }
     </style>
 </head>
-
 <body>
 <header>
     <h1>发送博文</h1>
@@ -129,8 +140,13 @@
         <label for="title">Title:</label><br>
         <input type="text" id="title" name="title" required><br><br>
         <label for="content">Content:</label><br>
-        <!-- 使用 EasyMDE 替换文本框以实现 Markdown 富文本编辑器 -->
-        <textarea id="content" name="content" rows="12" cols="50"></textarea><br><br>
+        <!-- 添加 wangEditor 的容器 -->
+        <div id="editor-wrapper">
+            <div id="toolbar-container"></div>
+            <div id="editor-container"></div>
+        </div>
+        <input type="hidden" name="content" id="content">
+        <br><br>
         <input type="submit" value="Submit">
     </form>
 </main>
@@ -138,17 +154,36 @@
     <p>&copy; 2024 CMX'S Blog Server</p>
 </footer>
 
-<!-- 引入 EasyMDE JavaScript 文件 -->
-<script src="https://cdn.jsdelivr.net/npm/easymde/dist/easymde.min.js"></script>
+<!-- 引入 wangEditor 的 JavaScript 文件 -->
+<script src="https://unpkg.com/@wangeditor/editor@latest/dist/index.js"></script>
 <script>
-    // 初始化 EasyMDE 编辑器
-    var easyMDE = new EasyMDE({ element: document.getElementById('content') });
+    const { createEditor, createToolbar } = window.wangEditor;
 
-    // 在表单提交前同步内容到 textarea
-    document.querySelector('form').addEventListener('submit', function () {
-        easyMDE.codemirror.save(); // 同步内容到原始的 textarea
+    const editorConfig = {
+        placeholder: 'Type here...',
+        onChange(editor) {
+            const html = editor.getHtml();
+            document.getElementById('content').value = html;
+            console.log('editor content', html);
+            // 也可以同步到 <textarea>
+        }
+    };
+
+    const editor = createEditor({
+        selector: '#editor-container',
+        html: '<p><br></p>',
+        config: editorConfig,
+        mode: 'default', // or 'simple'
+    });
+
+    const toolbarConfig = {};
+
+    const toolbar = createToolbar({
+        editor,
+        selector: '#toolbar-container',
+        config: toolbarConfig,
+        mode: 'default', // or 'simple'
     });
 </script>
 </body>
-
 </html>

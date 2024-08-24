@@ -25,6 +25,8 @@ int DataBase::openDB(const std::string& DBname) const {
         return rc;
     } else {
         std::cout << "数据库打开成功!" << std::endl;
+        //打印数据库的存放路径
+        std::cout << "数据库路径: " << sqlite3_db_filename(db, nullptr) << std::endl;
     }
     return SQLITE_OK;
 }

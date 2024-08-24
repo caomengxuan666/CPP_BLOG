@@ -26,6 +26,11 @@ set(PROJECT_FILES
         src/HtmlHandle.hpp
         src/DataBase.hpp
         src/DataBase.cpp
+        src/Forbidden.cpp
+        src/Forbidden.hpp
+        src/DataBase_storage.hpp
+        src/DataBase_storage.cpp
+        src/randomGenerator.hpp
 )
 
 #设置sqllite3的头文件和库文件搜索路径

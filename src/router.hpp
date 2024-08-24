@@ -7,6 +7,7 @@
 #include <sstream>
 #include <algorithm>
 #include <iostream>
+#include "randomGenerator.hpp"
 #include "HtmlHandle.hpp"
 
 namespace beast = boost::beast;
