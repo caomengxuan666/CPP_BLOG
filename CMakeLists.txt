@@ -40,7 +40,9 @@ link_directories(${SQLITE3_ROOT})
 # 查找Boost库
 find_package(Boost REQUIRED COMPONENTS regex thread chrono)
 
-link_libraries(libgdi32.a libwsock32.a libws2_32.a)
+IF (WIN32)
+    link_libraries(libgdi32.a libwsock32.a libws2_32.a)
+ENDIF ()
 
 add_executable(blog ${PROJECT_FILES})
 

@@ -12,8 +12,18 @@ http::response<http::string_body> Router::route_request(const http::request<http
         return render_posts();
     } else if (req.method() == http::verb::get && target_path.rfind("/posts/", 0) == 0) {
         // 解析ID，确保 "/posts/{id}" 路径被处理
-        int post_id = std::stoi(target_path.substr(7));  // 提取ID
-        return render_post(post_id);
+        try {
+            int post_id = std::stoi(target_path.substr(7));  // 提取ID
+            std::cout << "Post ID: " << post_id << std::endl;
+            return render_post(post_id);
+        } catch (const std::invalid_argument& e) {
+            std::cerr << "Error: Invalid ID format." << std::endl;
+            return render_posts();
+        } catch (const std::out_of_range& e) {
+            std::cerr << "Error: ID is out of integer range." << std::endl;
+            return render_posts();
+        }
+
     } else if (req.method() == http::verb::get && target_path == "/new-post") {
         return render_new_post_form();
     } else if (req.method() == http::verb::post && target_path == "/new-post") {

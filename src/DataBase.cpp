@@ -42,6 +42,7 @@ int DataBase::execCommand(const std::string& command) const {
         return rc;
     } else {
         std::cout << "SQL命令执行成功!" << std::endl;
+        std::cout<<"command:"<<command<<std::endl;
     }
     return SQLITE_OK;
 }
