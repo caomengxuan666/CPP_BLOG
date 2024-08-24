@@ -1,4 +1,5 @@
 /cmake-build-debug
 *ningan.log
 *.xml
-
+scripts/editor.js
+static/editor.css
